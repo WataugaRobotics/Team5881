@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /** ClassDoc */
-@TeleOp(name="Hello", group="")
-public class TeleOp extends OpMode {
-    HW8190 robot = new HW8190();
+@TeleOp(name = "Test", group = "")
+public class TeleOpTest extends OpMode {
+    HW5881 robot = new HW5881();
 
     // Code to run ONCE when the driver hits INIT
     @Override
