@@ -121,7 +121,7 @@ public class Teleop_Holo_4mtr_X extends OpMode {
 
         //lifter system
         if ((gamepad1.a)||(gamepad2.a)) {//lift down
-            robot.mtrLift.setPower(0.2);
+            robot.mtrLift.setPower(0.3);
         }else if ((gamepad1.y)||(gamepad2.y)) { //lift up
             robot.mtrLift.setPower(-0.5);
         }else
@@ -129,9 +129,9 @@ public class Teleop_Holo_4mtr_X extends OpMode {
 
         //glyph pincher system
         if ((gamepad1.x)||(gamepad2.x)) {  //open arm
-            robot.mtrHolder.setPower(0.5);
+            robot.mtrHolder.setPower(0.3);
         }else if ((gamepad1.b)||(gamepad2.b)) {  //close arm
-            robot.mtrHolder.setPower(-0.5);
+            robot.mtrHolder.setPower(-0.3);
         }else
             robot.mtrHolder.setPower(0.0);
 

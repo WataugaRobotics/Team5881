@@ -69,6 +69,10 @@ public class Hardware_Holo_4mtr_X
         mtrHolder.setDirection(DcMotor.Direction.FORWARD);
         holder.setDirection(Servo.Direction.FORWARD);
 
+        //set no-power to brake for lift and claw
+        mtrLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mtrHolder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         // Set all motors to zero power and servo to initial position
         mtrFR.setPower(0);

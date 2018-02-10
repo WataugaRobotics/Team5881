@@ -41,23 +41,23 @@ import com.qualcomm.robotcore.util.Range;
 
 /**
  * This file illustrates the concept of driving a path based on time.
- *
+ * <p>
  * The code is structured as a LinearOpMode
- *
+ * <p>
  * Start positions are laid out with the relic drop zones, looking down, and proceeding
  * clockwise
- *             Two Drop Zone Mats
+ * Two Drop Zone Mats
  * Position 4                Position 1
  * Position 3                Position 2
  */
 
-@Autonomous(name="Auto Position 1 Blue", group="Autonomous")
+@Autonomous(name = "Auto_Position_1_Blue", group = "Autonomous")
 //@Disabled
 public class Auto_Position_1_Blue extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware_Holo_4mtr_X robot = new Hardware_Holo_4mtr_X();
-    private ElapsedTime     runtime = new ElapsedTime();
+    private ElapsedTime runtime = new ElapsedTime();
 
     float DRIVE_SPEED = 1f;
     float PIVOT_SPEED = 0.2f; //this is the factor that adjusts the speed for pivoting to knock the jewel ball off in auto
@@ -70,15 +70,15 @@ public class Auto_Position_1_Blue extends LinearOpMode {
     //float green_high = 40;
     //float green_low = 11;
 
-    boolean blue_found=false;
-    boolean red_found=false;
-    double gamepad1LeftY = (0) ;  //keep the first negative 1 to be consistent with gamepad operation
+    boolean blue_found = false;
+    boolean red_found = false;
+    double gamepad1LeftY = (0);  //keep the first negative 1 to be consistent with gamepad operation
     double gamepad1LeftX = 0;
     double gamepad1RightX = (0);
-    double FrontRight = - gamepad1LeftX - gamepad1RightX;
+    double FrontRight = -gamepad1LeftX - gamepad1RightX;
     double FrontLeft = gamepad1LeftY - gamepad1RightX;
-    double BackRight =  gamepad1LeftX - gamepad1RightX;
-    double BackLeft = - gamepad1LeftY - gamepad1RightX;
+    double BackRight = gamepad1LeftX - gamepad1RightX;
+    double BackLeft = -gamepad1LeftY - gamepad1RightX;
 
     ColorSensor sensorColor;
 
@@ -131,7 +131,7 @@ public class Auto_Position_1_Blue extends LinearOpMode {
         // right stick X controls rotation
 /***********************************************************************/
 //Step move servo down
-       double Step_Time = 2;
+        double Step_Time = 4;
         //Set servo down so the sensor can read the color
         robot.holder.setPosition(0.8);
 
@@ -145,15 +145,16 @@ public class Auto_Position_1_Blue extends LinearOpMode {
 //Step sense color
         Step_Time = 5;  //seconds
         //if ((sensorColor.red()>red_low) && (sensorColor.red()<red_high) && (sensorColor.blue()>blue_low) && (sensorColor.blue()<blue_high) && (sensorColor.green()>green_low) && (sensorColor.green()<green_high))
-        if ((sensorColor.red()>red_low) && (sensorColor.red()>sensorColor.blue())) {
+        if ((sensorColor.red() > red_low) && (sensorColor.red() > sensorColor.blue())) {
             red_found = true;
             blue_found = false;
-        } else if ((sensorColor.blue()>blue_low)&& (sensorColor.red()<sensorColor.blue())) {
+        } else if ((sensorColor.blue() > blue_low) && (sensorColor.red() < sensorColor.blue())) {
             blue_found = true;
             red_found = false;
-        } else
+        } else {
             red_found = false;
             blue_found = false;
+        }
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < Step_Time)) {
@@ -171,14 +172,14 @@ public class Auto_Position_1_Blue extends LinearOpMode {
         Step_Time = 0.1;  //seconds
 
         //simulate gamepad entries
-        gamepad1LeftY = (0) ;  //keep the first negative 1 to be consistent with gamepad operation
+        gamepad1LeftY = (0);  //keep the first negative 1 to be consistent with gamepad operation
         gamepad1LeftX = 0;
-        if ((blue_found)&&(red_found==false)) {
-            gamepad1RightX = (PIVOT_SPEED) * DRIVE_SPEED;  //knock off red ball
-        }else if ((red_found)&&(blue_found==false)) {
+        if ((blue_found) && (red_found == false)) {
             gamepad1RightX = (-PIVOT_SPEED) * DRIVE_SPEED;  //knock off red ball
-        }else  //uncertain, do nothing
-            gamepad1RightX = 0;
+        } else if ((red_found) && (blue_found == false)) {
+            gamepad1RightX = (PIVOT_SPEED) * DRIVE_SPEED;  //knock off red ball
+        } else {  //uncertain, do nothing
+            gamepad1RightX = 0;}
 
 
         // holonomic formulas
@@ -223,15 +224,15 @@ public class Auto_Position_1_Blue extends LinearOpMode {
 
 /***********************************************************************/
 //Step move back to center of balancing stone
-        Step_Time = 0.5;
-        gamepad1LeftY = (0) ;  //keep the first negative 1 to be consistent with gamepad operation
+/*        Step_Time = 1;
+        gamepad1LeftY = (0);  //keep the first negative 1 to be consistent with gamepad operation
         gamepad1LeftX = 0;
-        if (blue_found) {
+        if ((blue_found) && (red_found == false)) {
             gamepad1RightX = (PIVOT_SPEED) * DRIVE_SPEED; //pivot back to center
-        }else if (red_found) {
+        } else if ((red_found) && (blue_found == false)) {
             gamepad1RightX = (-PIVOT_SPEED) * DRIVE_SPEED;  //pivot back to center
-        }else
-            gamepad1RightX=0;
+        } else{
+            gamepad1RightX = 0;}
 
         // holonomic formulas
         FrontRight = (gamepad1LeftY - gamepad1LeftX - gamepad1RightX);
@@ -259,7 +260,7 @@ public class Auto_Position_1_Blue extends LinearOpMode {
 
 /***********************************************************************/
 //Step move to safe zone
-        Step_Time = 1;
+ /*       Step_Time = 1;
 
         //simulate gamepad entries
         //gamepad1LeftY = (-1) * DRIVE_SPEED;
@@ -290,7 +291,7 @@ public class Auto_Position_1_Blue extends LinearOpMode {
             telemetry.addData("Move to safe zone", "%2.5f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-
+*/
         //step turn off motors
         // write the values to the motors
         robot.mtrFR.setPower(0);
