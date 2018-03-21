@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.team5881;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -52,23 +52,22 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @Autonomous(name = "Auto_Position_1_Red", group = "Autonomous")
-//@Disabled
 public class Auto_Position_1_Red extends LinearOpMode {
 
     /* Declare OpMode members. */
-    Hardware_Holo_4mtr_X robot = new Hardware_Holo_4mtr_X();
+    HW5881_HoloX robot = new HW5881_HoloX();
     private ElapsedTime runtime = new ElapsedTime();
 
     float DRIVE_SPEED = 1f;
     float PIVOT_SPEED = 0.2f; //this is the factor that adjusts the speed for pivoting to knock the jewel ball off in auto
 
     //For blue ball
-    //float red_high = 20;
+    //float RED_HIGH = 20;
     float red_low = 10;
     //float blue_high = 55;
     float blue_low = 10;
-    //float green_high = 40;
-    //float green_low = 11;
+    //float GREEN_HIGH = 40;
+    //float GREEN_LOW = 11;
 
     boolean blue_found = false;
     boolean red_found = false;
@@ -107,7 +106,7 @@ public class Auto_Position_1_Red extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        robot.holder.setPosition(0);
+        robot.jewelArm.setPosition(0);
 
 
         // Send telemetry message to signify robot waiting;
@@ -133,7 +132,7 @@ public class Auto_Position_1_Red extends LinearOpMode {
 //Step move servo done
         double Step_Time = 4;
         //Set servo down so the sensor can read the color
-        robot.holder.setPosition(0.8);
+        robot.jewelArm.setPosition(0.8);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < Step_Time)) {
@@ -144,7 +143,7 @@ public class Auto_Position_1_Red extends LinearOpMode {
 /***********************************************************************/
 //Step sense color
         Step_Time = 5;  //seconds
-        //if ((sensorColor.red()>red_low) && (sensorColor.red()<red_high) && (sensorColor.blue()>blue_low) && (sensorColor.blue()<blue_high) && (sensorColor.green()>green_low) && (sensorColor.green()<green_high))
+        //if ((sensorColor.red()>RED_LOW) && (sensorColor.red()<RED_HIGH) && (sensorColor.blue()>BLUE_LOW) && (sensorColor.blue()<blue_high) && (sensorColor.green()>GREEN_LOW) && (sensorColor.green()<GREEN_HIGH))
         if ((sensorColor.red() > red_low) && (sensorColor.red() > sensorColor.blue())) {
             red_found = true;
             blue_found = false;
@@ -213,7 +212,7 @@ public class Auto_Position_1_Red extends LinearOpMode {
 //Step move servo up
         Step_Time = 2;
         //Set servo down so the sensor can read the color
-        robot.holder.setPosition(0);
+        robot.jewelArm.setPosition(0);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < Step_Time)) {

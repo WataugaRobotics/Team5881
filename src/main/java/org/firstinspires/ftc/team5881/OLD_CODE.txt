@@ -1,0 +1,96 @@
+//drive speed reduction
+//set by fine control using joysticks
+/*if (((gamepad1LeftY<0.7) && (gamepad1LeftY>-0.7))&&((gamepad1LeftX<0.7) && (gamepad1LeftX>-0.7))&&((gamepad1RightX<0.7) && (gamepad1RightX>-0.7))) {
+         speed_reduction = 0.3f;  //see range clip below, sets upper and lower bound on motor
+}else    speed_reduction = 1f;
+*/
+//allow user to set a speed reduction
+/*this resets too quickly
+if ((gamepad1.left_bumper) && (speed_reduction==0.3)) {
+    speed_reduction = 1f;
+} else if ((gamepad1.left_bumper) && (speed_reduction==1)) {
+    speed_reduction = 0.3f;
+}
+
+
+
+// telemetry.addData("FrontRight",  "%.2f", FrontRight);
+// telemetry.addData("BackRight", "%.2f", BackRight);
+// telemetry.addData("FrontLeft",  "%.2f", FrontLeft);
+// telemetry.addData("BackLeft", "%.2f", BackLeft);
+telemetry.addData("speed_reduction", "%.2f", speed_reduction);
+telemetry.addData("gamepad1LeftY", "%.2f", gamepad1LeftY);
+telemetry.addData("gamepad1LeftX", "%.2f", gamepad1LeftX);
+telemetry.addData("gamepad1RightX", "%.2f", gamepad1RightX);
+
+
+
+// Step move back to center of balancing stone
+/*        Step_Time = 1;
+        gamepad1LeftY = (0);  //keep the first negative 1 to be consistent with gamepad operation
+        gamepad1LeftX = 0;
+        if ((blue_found) && (red_found == false)) {
+            gamepad1RightX = (PIVOT_SPEED) * DRIVE_SPEED; //pivot back to center
+        } else if ((red_found) && (blue_found == false)) {
+            gamepad1RightX = (-PIVOT_SPEED) * DRIVE_SPEED;  //pivot back to center
+        } else{
+            gamepad1RightX = 0;}
+
+        // holonomic formulas
+        FrontRight = (gamepad1LeftY - gamepad1LeftX - gamepad1RightX);
+        BackRight = (gamepad1LeftY + gamepad1LeftX - gamepad1RightX);
+        BackLeft = (-gamepad1LeftY + gamepad1LeftX - gamepad1RightX);
+        FrontLeft = (-gamepad1LeftY - gamepad1LeftX - gamepad1RightX);
+
+        // clip the right/left values so that the values never exceed +/- 1
+        FrontRight = Range.clip(FrontRight, -1, 1);
+        FrontLeft = Range.clip(FrontLeft, -1, 1);
+        BackRight = Range.clip(BackRight, -1, 1);
+        BackLeft = Range.clip(BackLeft, -1, 1);
+
+        // write the values to the motors
+        robot.mtrFR.setPower(FrontRight);
+        robot.mtrFL.setPower(FrontLeft);
+        robot.mtrBR.setPower(BackRight);
+        robot.mtrBL.setPower(BackLeft);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < Step_Time)) {
+            telemetry.addData("Recenter", "%2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+/***********************************************************************/
+// Step move to safe zone
+/*       Step_Time = 1;
+
+        //simulate gamepad entries
+        //gamepad1LeftY = (-1) * DRIVE_SPEED;
+        gamepad1LeftY = (0) * DRIVE_SPEED;
+        gamepad1LeftX = 0;
+        gamepad1RightX = 0;
+
+        // holonomic formulas
+        FrontRight = (gamepad1LeftY - gamepad1LeftX - gamepad1RightX);
+        BackRight = (gamepad1LeftY + gamepad1LeftX - gamepad1RightX);
+        BackLeft = (-gamepad1LeftY + gamepad1LeftX - gamepad1RightX);
+        FrontLeft = (-gamepad1LeftY - gamepad1LeftX - gamepad1RightX);
+
+        // clip the right/left values so that the values never exceed +/- 1
+        FrontRight = Range.clip(FrontRight, -1, 1);
+        FrontLeft = Range.clip(FrontLeft, -1, 1);
+        BackRight = Range.clip(BackRight, -1, 1);
+        BackLeft = Range.clip(BackLeft, -1, 1);
+
+        // write the values to the motors
+        robot.mtrFR.setPower(FrontRight);
+        robot.mtrFL.setPower(FrontLeft);
+        robot.mtrBR.setPower(BackRight);
+        robot.mtrBL.setPower(BackLeft);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < Step_Time)) {
+            telemetry.addData("Move to safe zone", "%2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+*/
