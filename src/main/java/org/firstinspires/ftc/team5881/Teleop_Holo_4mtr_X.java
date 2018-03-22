@@ -7,6 +7,7 @@
  */
 package org.firstinspires.ftc.team5881;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -27,7 +28,7 @@ X       X
 X BACK  X
 */
 @TeleOp(name = "HoloX+Btns", group = "TeleOp")
-// @Disabled
+@Disabled
 public class Teleop_Holo_4mtr_X extends OpMode {
     HW5881_HoloX robot = new HW5881_HoloX();
 
