@@ -1,13 +1,14 @@
-package org.firstinspires.ftc.team5881.Sumo1;
+package org.firstinspires.ftc.team5881.sumo1;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import io.github.wataugarobotics.ftclib.drive.Drive;
 
 public class HW_S1 {
     // OpMode members
     HardwareMap hwMap = null;
 
-    public Tank drive = null;
+    public Drive drive = null;
 
     // Constructor
     public HW_S1() {}
@@ -16,6 +17,6 @@ public class HW_S1 {
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap; // save reference to Hardware map
         drive = new Tank(hwMap, new String[] {"mtrL", "mtrR"});
-        drive.init(DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_USING_ENCODER);
+        drive.init(DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

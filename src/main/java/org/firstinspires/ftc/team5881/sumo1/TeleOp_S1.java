@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.team5881.Sumo1;
+package org.firstinspires.ftc.team5881.sumo1;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@Autonomous(name = "Test", group = "Auto")
+@TeleOp(name = "TeleOp_S1", group = "TeleOp")
 // @Disabled
-public class Test extends OpMode {
+public class TeleOp_S1 extends OpMode {
     HW_S1 robot = new HW_S1();
 
     // Constants
@@ -19,12 +19,12 @@ public class Test extends OpMode {
     public void init_loop() {}
 
     @Override
-    public void start() {
-        robot.drive.move(10, 10);
-    }
+    public void start() {}
 
     @Override
-    public void loop() {}
+    public void loop() {
+        robot.drive.move(gamepad1.left_stick_y, gamepad1.right_stick_y);
+    }
 
     @Override
     public void stop() {}
