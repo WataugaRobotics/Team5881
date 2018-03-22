@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.team5881.Sumo1;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
@@ -10,16 +9,11 @@ public class Tank {
     private DcMotor[] motors = null;
 
     /**
-     * Constructs a tank drive with a hwMap & the String names of 2 motors.
+     * Constructs a tank drive with a hwMap and the String names of the drive motors
      *
      * @param hwMap a HardwareMap with which to access the motors
-     * @param mtrL the String name of the Left motor
-     * @param mtrR the String name of the Right motor
+     * @param motors a String[] of the motor names (l, r, l, r)
      */
-    public Tank(HardwareMap hwMap, String mtrL, String mtrR) {
-        this.motors = new DcMotor[] {hwMap.dcMotor.get(mtrL), hwMap.dcMotor.get(mtrR)};
-    }
-
     public Tank(HardwareMap hwMap, String[] motors) {
         this.motors = new DcMotor[motors.length];
         for (int i = 0; i < motors.length; i++) {
