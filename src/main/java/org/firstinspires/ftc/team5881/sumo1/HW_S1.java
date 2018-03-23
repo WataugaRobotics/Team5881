@@ -2,13 +2,13 @@ package org.firstinspires.ftc.team5881.sumo1;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import io.github.wataugarobotics.ftclib.drive.Drive;
+import io.github.wataugarobotics.ftclib.drive.Tank;
 
 public class HW_S1 {
     // OpMode members
     HardwareMap hwMap = null;
 
-    public Drive drive = null;
+    public Tank drive = null;
 
     // Constructor
     public HW_S1() {}
