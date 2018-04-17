@@ -23,7 +23,7 @@ public class TeleOp_S1 extends OpMode {
 
     @Override
     public void loop() {
-        robot.drive.move(gamepad1.left_stick_y, gamepad1.right_stick_y);
+        robot.drive.move(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
     }
 
     @Override
