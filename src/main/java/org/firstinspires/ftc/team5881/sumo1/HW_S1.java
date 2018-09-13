@@ -3,7 +3,6 @@ package org.firstinspires.ftc.team5881.sumo1;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import io.github.wataugarobotics.ftclib.drive.Tank;
 
 public class HW_S1 {
