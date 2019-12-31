@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -41,16 +42,25 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="TeleOP", group="Tungsteel 2019-20")
 //@Disabled
 public class TeleOP extends OpMode {
-    // Declare OpMode members.
+    // Declare variables
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFront = null;
     private DcMotor leftBack = null;
     private DcMotor rightFront = null;
     private DcMotor rightBack = null;
     private DcMotor lift = null;
-    private int speedMod = 1;
+
+    private int speedMod = 2;
     private boolean startPressed = false;
+
     private Servo platform = null;
+    private boolean platformDown = false;
+    private boolean aPressed = false;
+
+    private CRServo intakeRight = null;
+    private CRServo intakeLeft = null;
+    private boolean bumperPressed = false;
+    private boolean intakeInOn = false;
 
 
     /*
@@ -69,6 +79,8 @@ public class TeleOP extends OpMode {
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         lift = hardwareMap.get(DcMotor.class, "lift");
         platform = hardwareMap.get(Servo.class, "platform");
+        intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
+        intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -119,11 +131,32 @@ public class TeleOP extends OpMode {
         }
 
         //Platform servo
-        if(gamepad1.a){
-            platform.setPosition(0);
-        }else{
-            platform.setPosition(1);
+        if(gamepad1.a && !aPressed){
+            aPressed = true;
+            platformDown = !platformDown;
+            if(platformDown){
+                platform.setPosition(0);
+            }else{
+                platform.setPosition(1);
+            }
+        }else if(!gamepad1.a){
+            aPressed = false;
         }
+
+        //Intake
+        if(gamepad1.right_bumper && !bumperPressed){
+            bumperPressed = true;
+            if(intakeInOn){
+                intakeRight.setPower(1);
+                intakeLeft.setPower(1);
+            }else{
+                intakeRight.setPower(0);
+                intakeLeft.setPower(0);
+            }
+        }else if(!gamepad1.right_bumper){
+            bumperPressed = false;
+        }
+        if
 
         // Mechanum uses the left stick to drive in the x,y directions, and the right stick to turn
         mechanum(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x);
@@ -148,7 +181,7 @@ public class TeleOP extends OpMode {
     }
 
     //CUSTOM METHODS
-    public void mechanum(double x, double y, double r){
+    public void mechanum(float x, float y, float r){
         double leftFrontPower = Range.clip(y + x + r, -1.0, 1.0) / speedMod;
         double leftBackPower = Range.clip(y - x + r, -1.0, 1.0) / speedMod;
         double rightFrontPower = Range.clip(y - x - r, -1.0, 1.0) / speedMod;
