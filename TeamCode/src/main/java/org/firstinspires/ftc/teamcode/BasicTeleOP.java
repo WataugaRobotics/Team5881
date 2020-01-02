@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="TeleOP", group="Tungsteel 2019-20")
 //@Disabled
-public class TeleOP extends OpMode {
+public class BasicTeleOP extends OpMode {
     // Declare variables
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFront = null;
@@ -20,21 +18,12 @@ public class TeleOP extends OpMode {
     private DcMotor rightFront = null;
     private DcMotor rightBack = null;
     private DcMotor lift = null;
-
     private int speedMod = 2;
     private boolean startPressed = false;
-
     private Servo platform = null;
-    private boolean aPressed = false;
-
     private CRServo intakeRight = null;
     private CRServo intakeLeft = null;
-    private boolean intakeInOn = false;
-    private boolean bumperPressed = false;
-
     private Servo pivot = null;
-    private boolean pivotOut = false;
-    private boolean bPressed = false;
 
 
     /*
@@ -107,52 +96,35 @@ public class TeleOP extends OpMode {
         }else if(!gamepad1.start){
             startPressed = false;
         }
-        telemetry.addData("Test", startPressed);
 
         //Platform servo
-        if(gamepad1.a && !aPressed){
-            if(platform.getPosition() == 0){
-                platform.setPosition(1);
-            }else{
-                platform.setPosition(0);
-            }
-            aPressed = true;
-        }else if(!gamepad1.a){
-            aPressed = false;
+        if(gamepad1.a) {
+            platform.setPosition(1);
+        }else{
+            platform.setPosition(0);
         }
 
         //Intake wheels
-        if(gamepad1.right_bumper && !bumperPressed){
-            bumperPressed = true;
-            if(intakeInOn){
-                intakeRight.setPower(1);
-                intakeLeft.setPower(-1);
-            }else{
-                intakeRight.setPower(0);
-                intakeLeft.setPower(0);
-            }
-        }else if(!gamepad1.right_bumper){
-            bumperPressed = false;
-            if(gamepad1.left_bumper){
-                intakeRight.setPower(-1);
-                intakeLeft.setPower(1);
-            }else{
-                intakeRight.setPower(0);
-                intakeLeft.setPower(0);
-            }
+        if(gamepad1.right_bumper){
+            intakeRight.setPower(1);
+            intakeLeft.setPower(-1);
+        }else{
+            intakeRight.setPower(0);
+            intakeLeft.setPower(0);
+        }
+        if(gamepad1.left_bumper && !gamepad1.right_bumper){
+            intakeRight.setPower(-1);
+            intakeLeft.setPower(1);
+        }else{
+            intakeRight.setPower(0);
+            intakeLeft.setPower(0);
         }
 
         //Pivot servo
-        if(gamepad1.b && !bPressed){
-            bPressed = true;
-            pivotOut = !pivotOut;
-            if(pivotOut){
-                pivot.setPosition(1);
-            }else{
-                pivot.setPosition(0);
-            }
-        }else if(!gamepad1.b){
-            aPressed = false;
+        if(gamepad1.b){
+            pivot.setPosition(1);
+        }else{
+            pivot.setPosition(0);
         }
 
         // Mechanum uses the left stick to drive in the x,y directions, and the right stick to turn
