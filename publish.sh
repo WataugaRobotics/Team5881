@@ -34,6 +34,8 @@ case "$branch" in
 	    *)
 		git checkout -b $response
 		git push -uf origin $response
+		git checkout master
+		git push -uf origin master
 	    ;;
 	esac
     ;;
