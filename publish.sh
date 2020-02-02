@@ -36,9 +36,12 @@ case "$branch" in
 		git push -uf origin $response
 	    ;;
 	esac
+    ;;
+	
     *)
 	git checkout $branch 
 	git push -uf origin $branch
     ;;
+    	
 esac
 
