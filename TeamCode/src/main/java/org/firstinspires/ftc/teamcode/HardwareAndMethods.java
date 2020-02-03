@@ -40,6 +40,7 @@ public class HardwareAndMethods {
     public Servo claw = null;
     public Servo capstone = null;
 
+    public float peak;
     BNO055IMU imu;
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -205,6 +206,18 @@ public class HardwareAndMethods {
 
         mechanum(0f, 0f, 0f);
     }
+
+    public void liftGo(float pos){
+        if(getLiftPosition() != pos){
+            while(getLiftPosition() > pos){
+                lift.setPower(-1);
+            }
+            while(getLiftPosition() < pos){
+                lift.setPower(1);
+            }
+        }
+    }
+
 
     public float map(float input, float inputMin, float inputMax, float outputMin, float outputMax){
         return (input - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
