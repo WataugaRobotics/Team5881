@@ -17,6 +17,7 @@ public class KyleTwoTeleop extends OpMode {
     private boolean startPressed = false;
     private boolean platformChanged = false, platformOn = false;
     private boolean clawChanged = false, clawOn = false;
+    private boolean liftChangedDown = false, liftChangedUp = false;
     private boolean capstoneChanged = false, capstoneOn = false, capstoneAutoChanged = false;
 
     /*
@@ -86,12 +87,29 @@ public class KyleTwoTeleop extends OpMode {
         } else if (!gamepad2.y) capstoneChanged = false;
 
 
-            //Capstone servo not auto
+        //Capstone servo not auto
         if(gamepad2.b && !capstoneChanged) {
             robot.capstone.setPosition(capstoneOn ? 0 : 1);
             capstoneOn = !capstoneOn;
             capstoneChanged = true;
         } else if(!gamepad2.b) capstoneChanged = false;
+
+        /* Fix in HardwareAndMethods
+        //Set Lift to Zero
+        if(gamepad2.dpad_down && !liftChangedDown) {
+            robot.liftGo(0);
+            liftChangedDown = true;
+        } else if(!liftChangedDown){
+            liftChangedDown = false;
+        }
+
+        if(gamepad2.dpad_up && !liftChangedUp) {
+            robot.liftGo(0);
+            liftChangedUp = liftChangedUp;
+        } else if(!liftChangedUp){
+            liftChangedUp = false;
+        }
+        */
 
             // Calls mechanum method
             // Mechanum uses the left stick to drive in the x,y directions, and the right stick to turn

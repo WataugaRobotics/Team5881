@@ -207,8 +207,11 @@ public class HardwareAndMethods {
         mechanum(0f, 0f, 0f);
     }
 
+    /*
+    //Kyle's lift position idea
     public void liftGo(float pos){
-        if(getLiftPosition() != pos){
+        float mappedLiftPos = map(pos, 0, topHeight, 0, maxLiftPos);
+        while(getLiftPosition() != pos){
             while(getLiftPosition() > pos){
                 lift.setPower(-1);
             }
@@ -216,7 +219,7 @@ public class HardwareAndMethods {
                 lift.setPower(1);
             }
         }
-    }
+    }*/
 
 
     public float map(float input, float inputMin, float inputMax, float outputMin, float outputMax){
