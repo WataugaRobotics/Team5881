@@ -94,22 +94,22 @@ public class KyleTwoTeleop extends OpMode {
             capstoneChanged = true;
         } else if(!gamepad2.b) capstoneChanged = false;
 
-        /* Fix in HardwareAndMethods
+        //Fix in HardwareAndMethods
         //Set Lift to Zero
-        if(gamepad2.dpad_down && !liftChangedDown) {
-            robot.liftGo(0);
+        if(gamepad2.right_bumper && !liftChangedDown) {
+            robot.changeLiftPos(93);
             liftChangedDown = true;
-        } else if(!liftChangedDown){
+        } else if(!gamepad2.dpad_down){
             liftChangedDown = false;
         }
 
-        if(gamepad2.dpad_up && !liftChangedUp) {
-            robot.liftGo(0);
-            liftChangedUp = liftChangedUp;
-        } else if(!liftChangedUp){
-            liftChangedUp = false;
+        if(gamepad2.left_bumper && !liftChangedDown) {
+            robot.changeLiftPos(0);
+            liftChangedDown = true;
+        } else if(!gamepad2.dpad_down){
+            liftChangedDown = false;
         }
-        */
+
 
             // Calls mechanum method
             // Mechanum uses the left stick to drive in the x,y directions, and the right stick to turn
@@ -125,9 +125,12 @@ public class KyleTwoTeleop extends OpMode {
             telemetry.addLine("Distance Sensor ||")
                     .addData(" CM: ", robot.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addLine("Lift Pos ||")
-                    .addData(" ", robot.getLiftPosition());
+                    .addData("Current Position", robot.getLiftPosition())
+                    .addData("Highest Position", robot.liftMaximum())
+                    .addData("Lowest Position", robot.liftMinimum());
             telemetry.addLine("IMU Z||")
                     .addData(" ", robot.imuGetZ());
+
 
         }
 
@@ -137,6 +140,7 @@ public class KyleTwoTeleop extends OpMode {
         @Override
         public void stop () {
         }
+
     }
 
 

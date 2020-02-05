@@ -34,6 +34,7 @@ public class HardwareAndMethods {
     static final float COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * 3.1415f);
 
     public float speedMod = 1f;
+    public float liftPeakH, liftPeakL = 0f;
 
     public Servo platformRight = null;
     public Servo platformLeft = null;
@@ -115,6 +116,9 @@ public class HardwareAndMethods {
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
     }
 
+
+
+    //Control Motors
     public void lift(float u, float d){
         double liftPower = Range.clip(u + d, -1.0, 1.0);
         lift.setPower(liftPower);
@@ -207,19 +211,34 @@ public class HardwareAndMethods {
         mechanum(0f, 0f, 0f);
     }
 
-    /*
+
     //Kyle's lift position idea
-    public void liftGo(float pos){
-        float mappedLiftPos = map(pos, 0, topHeight, 0, maxLiftPos);
-        while(getLiftPosition() != pos){
-            while(getLiftPosition() > pos){
+    public void changeLiftPos(float pos){
+        float mappedLiftPos = map(pos, 0, 97, 0, 10735);
+
+        while(getLiftPosition() > mappedLiftPos + 3 || getLiftPosition() < mappedLiftPos - 3) {
+            if (getLiftPosition() > mappedLiftPos + 3) {
                 lift.setPower(-1);
-            }
-            while(getLiftPosition() < pos){
+            } else if (getLiftPosition() < mappedLiftPos -3) {
                 lift.setPower(1);
             }
         }
-    }*/
+    }
+
+
+    //find out maximum and minimum of the lift
+    public float liftMaximum() {
+        if(lift.getCurrentPosition() > liftPeakH){
+            liftPeakH = lift.getCurrentPosition();
+        }
+        return liftPeakH;
+    }
+    public float liftMinimum() {
+        if(lift.getCurrentPosition() < liftPeakL){
+            liftPeakL = lift.getCurrentPosition();
+        }
+        return liftPeakL;
+    }
 
 
     public float map(float input, float inputMin, float inputMax, float outputMin, float outputMax){
@@ -239,7 +258,6 @@ public class HardwareAndMethods {
     public float getLiftPosition(){
         return lift.getCurrentPosition();
     }
-
 
 
 }
