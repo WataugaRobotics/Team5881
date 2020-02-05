@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
+
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -216,11 +218,11 @@ public class HardwareAndMethods {
     public void changeLiftPos(float pos){
         float mappedLiftPos = map(pos, 0, 97, 0, 10735);
 
-        while(getLiftPosition() > mappedLiftPos + 3 || getLiftPosition() < mappedLiftPos - 3) {
-            if (getLiftPosition() > mappedLiftPos + 3) {
+        while(getLiftPosition() > mappedLiftPos + 1 || getLiftPosition() < mappedLiftPos - 1) {
+            if (getLiftPosition() > 0) {
                 lift.setPower(-1);
-            } else if (getLiftPosition() < mappedLiftPos -3) {
-                lift.setPower(1);
+            } else if (getLiftPosition() < 00) {
+                lift.setPower(0);
             }
         }
     }
@@ -257,6 +259,9 @@ public class HardwareAndMethods {
 
     public float getLiftPosition(){
         return lift.getCurrentPosition();
+    }
+    public float getLiftPositionCm(){
+        return  map(getLiftPosition(), 0, 97, 0, 10735);
     }
 
 

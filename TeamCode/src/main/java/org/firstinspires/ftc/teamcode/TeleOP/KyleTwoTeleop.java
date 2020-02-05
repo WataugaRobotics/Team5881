@@ -95,14 +95,14 @@ public class KyleTwoTeleop extends OpMode {
         } else if(!gamepad2.b) capstoneChanged = false;
 
         //Fix in HardwareAndMethods
-        //Set Lift to Zero
-        if(gamepad2.right_bumper && !liftChangedDown) {
+        //Set Lift to up
+        if(gamepad2.right_bumper && !liftChangedUp) {
             robot.changeLiftPos(93);
-            liftChangedDown = true;
+            liftChangedUp = true;
         } else if(!gamepad2.dpad_down){
-            liftChangedDown = false;
+            liftChangedUp = false;
         }
-
+        //set lift all the way down
         if(gamepad2.left_bumper && !liftChangedDown) {
             robot.changeLiftPos(0);
             liftChangedDown = true;
@@ -111,8 +111,11 @@ public class KyleTwoTeleop extends OpMode {
         }
 
 
+
+
             // Calls mechanum method
             // Mechanum uses the left stick to drive in the x,y directions, and the right stick to turn
+
             robot.mechanum(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x);
 
             //Calls lift method
@@ -126,6 +129,7 @@ public class KyleTwoTeleop extends OpMode {
                     .addData(" CM: ", robot.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addLine("Lift Pos ||")
                     .addData("Current Position", robot.getLiftPosition())
+                    .addData("Current Position Cm", robot.getLiftPositionCm())
                     .addData("Highest Position", robot.liftMaximum())
                     .addData("Lowest Position", robot.liftMinimum());
             telemetry.addLine("IMU Z||")
