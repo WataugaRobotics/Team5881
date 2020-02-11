@@ -112,8 +112,7 @@ public class KyleTwoTeleopBackup extends OpMode {
                     .addData(" CM: ", robot.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addLine("Lift Pos ||")
                     .addData("Current Position", robot.getLiftPosition())
-                    .addData("Highest Position", robot.liftMaximum())
-                    .addData("Lowest Position", robot.liftMinimum());
+                    .addData("Highest Position", robot.liftMaximum());
             telemetry.addLine("IMU Z||")
                     .addData(" ", robot.imuGetZ());
 

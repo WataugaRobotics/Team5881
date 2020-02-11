@@ -44,13 +44,13 @@ public class HardwareAndMethods {
     public Servo capstone = null;
     int addative = 1;
     int target;
-
     public float peak;
     BNO055IMU imu;
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-    ColorSensor colorSensor;
-    public DistanceSensor distanceSensor;
+    public ColorSensor colorSensorRight;
+   public DistanceSensor distanceSensor;
+    ColorSensor colorSensorLeft;
     float hsvValues[] = {0F, 0F, 0F};
     final double COLOR_SCALE_FACTOR = 255;
 
@@ -77,6 +77,8 @@ public class HardwareAndMethods {
         rightFront = hwMap.get(DcMotor.class, "rightFront");
         rightBack = hwMap.get(DcMotor.class, "rightBack");
         lift = hwMap.get(DcMotor.class, "lift");
+        lift.setTargetPosition(0);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         platformRight = hwMap.get(Servo.class, "platformRight");
         platformLeft = hwMap.get(Servo.class, "platformLeft");
@@ -84,8 +86,9 @@ public class HardwareAndMethods {
         capstone = hwMap.get(Servo.class, "capstone");
 
         imu = hwMap.get(BNO055IMU.class, "imu");
-        colorSensor = hwMap.get(ColorSensor.class, "colorDistance");
-        distanceSensor = hwMap.get(DistanceSensor.class, "colorDistance");
+        colorSensorRight = hwMap.get(ColorSensor.class, "colorRight");
+        distanceSensor = hwMap.get(DistanceSensor.class, "distance");
+        colorSensorLeft = hwMap.get(ColorSensor.class, "colorLeft");
 
         // Set motor directions
         leftFront.setDirection(DcMotor.Direction.REVERSE);
@@ -96,7 +99,7 @@ public class HardwareAndMethods {
         // Set motor modes
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         if(type == "auto"){
             leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -186,56 +189,58 @@ public class HardwareAndMethods {
         mechanum(0f, 0f, 0f);
     }
 
-    public void mechanumColorDistanceAuto(float xTargetPower, float yTargetPower, float targetAngle, float distanceCM){
-        float angleOffset;
-        float rotation;
-
-        double startTime = runtime.milliseconds();
-
-        while(distanceSensor.getDistance(DistanceUnit.CM) > distanceCM || distanceSensor.getDistance(DistanceUnit.CM) == distanceSensor.distanceOutOfRange){
-            Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            angleOffset = orientation.firstAngle - targetAngle;
-            if(angleOffset < -10){
-                rotation = 0.5f;
-            }else if(angleOffset > 10){
-                rotation = -0.5f;
-            }else{
-                rotation = map(angleOffset, -10, 10, 0.5f, -0.5f);
-            }
-
-            if(runtime.milliseconds() < startTime + 250) {
-                mechanum(-xTargetPower / 2f, -yTargetPower / 2f, rotation);
-            }else if(distanceSensor.getDistance(DistanceUnit.CM) < distanceCM + 2 && distanceSensor.getDistance(DistanceUnit.CM) > distanceCM - 2){
-                mechanum(-xTargetPower / 2f, -yTargetPower / 2f, rotation);
-            }else{
-                mechanum(-xTargetPower, -yTargetPower, rotation);
-            }
-        }
-
-        mechanum(0f, 0f, 0f);
-    }
-
-    public void liftByBlock(int blockTarget){
+    /*public void liftByBlock(int blockTarget){
         int current = getLiftPositionCm();
 
         int mod = current % 14;
+        while(blockTarget != 0) {
+            if (current > 5) {
+                //if the target is above the platform (5)
+                target = current - ((current % 14) + 5) + (14 * blockTarget);
 
-        if(current > 5){
-            target = current - ((current % 14) + 5) + (( blockTarget > 0) ? 14 : 0) * blockTarget;
-            }
-        else if(current < 5) {
-                target = ((blockTarget > 0) ? 5 : 0) + (blockTarget - 1) * 14 ;
-            }
-        else if(current == 5){
-                target = (blockTarget > 0) ? 19 : 0;
+                while (lift.isBusy()) {
+
+                }
+                current = target;
+                if(blockTarget > 0){
+
+                }
+                //subtracts the distance from the multiple of 14 below it, and then adds (or subtracts) 14 from that
+            } else if (current < 5) {
+                //if the target is below the platform
+                target = ((blockTarget > 0) ? 5 + ((blockTarget - 1) * 14) : 0);
+
+                while (lift.isBusy()) {
+
+                }
+                current = target;
+            } else if (current == 5) {
+                target = ((blockTarget > 0) ? 19 + (blockTarget - 1) * 14 : 0);
+
+                while (lift.isBusy()) {
+
+                }
+                current = target;
             }
             setLiftPosition(target + addative);
-    }
+        }
+    } */
+
     //Kyle's lift position idea
-    public void setLiftPosition(int pos){
-        int mappedLiftPos = mapInt(pos, 0, 97, 0, liftMaximum());
+    public void setLiftPosition(int cmPos){
+        //lift.setTargetPosition(0);
+       // lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        int mappedLiftPos = mapInt(cmPos, 0, 97, 0, liftMaximum());
         lift.setTargetPosition(mappedLiftPos);
-        lift.setPower(1);
+        if(getLiftPositionCm() < cmPos){
+            lift.setPower(1);
+        }
+        else if (getLiftPositionCm() > cmPos){
+            lift.setPower(-1);
+        }
+        else{
+            lift.setPower(0);
+        }
         while(lift.isBusy()){
 
         }
@@ -249,12 +254,6 @@ public class HardwareAndMethods {
         }
         return liftPeakH;
     }
-    public float liftMinimum() {
-        if(lift.getCurrentPosition() < liftPeakL){
-            liftPeakL = lift.getCurrentPosition();
-        }
-        return liftPeakL;
-    }
 
     public int mapInt(int input, int inputMin, int inputMax, int outputMin, int outputMax){
         return (input - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
@@ -265,7 +264,7 @@ public class HardwareAndMethods {
     }
     
     public float hsvGetColor(int hsvIndex){
-        Color.RGBToHSV((int) (colorSensor.red() * COLOR_SCALE_FACTOR), (int) (colorSensor.green() * COLOR_SCALE_FACTOR), (int) (colorSensor.blue() * COLOR_SCALE_FACTOR), hsvValues);
+        Color.RGBToHSV((int) (colorSensorRight.red() * COLOR_SCALE_FACTOR), (int) (colorSensorRight.green() * COLOR_SCALE_FACTOR), (int) (colorSensorRight.blue() * COLOR_SCALE_FACTOR), hsvValues);
         return hsvValues[hsvIndex];
     }
 
@@ -278,7 +277,7 @@ public class HardwareAndMethods {
         return lift.getCurrentPosition();
     }
     public int getLiftPositionCm(){
-        return mapInt(lift.getCurrentPosition(), 0, 97, 0, 10735);
+        return mapInt(lift.getCurrentPosition(), 0, 97, 0, liftMaximum());
     }
 
 

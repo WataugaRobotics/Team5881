@@ -19,6 +19,8 @@ public class KyleTwoTeleop extends OpMode {
     private boolean clawChanged = false, clawOn = false;
     private boolean liftChangedDown = false, liftChangedUp = false;
     private boolean capstoneChanged = false, capstoneOn = false, capstoneAutoChanged = false;
+    private boolean liftChanged = false;
+    int blockInput;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -30,6 +32,7 @@ public class KyleTwoTeleop extends OpMode {
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+
     }
 
     /*
@@ -96,25 +99,33 @@ public class KyleTwoTeleop extends OpMode {
 
         //Fix in HardwareAndMethods
         //Set Lift to up
-        if(gamepad2.right_bumper && !liftChangedUp) {
-            robot.setLiftPosition(97);
+      /*  if(gamepad2.right_bumper && !liftChangedUp) {
+            blockInput = blockInput + 1;
+            robot.liftByBlock(blockInput);
             liftChangedUp = true;
         } else if(!gamepad2.dpad_down){
             liftChangedUp = false;
         }
         //set lift all the way down
         if(gamepad2.left_bumper && !liftChangedDown) {
-            robot.setLiftPosition(0);
-
+           blockInput = blockInput - 1;
+           robot.liftByBlock(blockInput);
             liftChangedDown = true;
         } else if(!gamepad2.dpad_down){
             liftChangedDown = false;
         }
+        */
+        if (gamepad2.left_bumper && !liftChanged) {
+            //code
+            robot.setLiftPosition(10);
+            liftChanged = true;
+        } else if (!gamepad2.left_bumper) liftChanged = false;
 
 
 
 
-            // Calls mechanum method
+
+        // Calls mechanum method
             // Mechanum uses the left stick to drive in the x,y directions, and the right stick to turn
 
             robot.mechanum(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x);
@@ -131,8 +142,7 @@ public class KyleTwoTeleop extends OpMode {
             telemetry.addLine("Lift Pos ||")
                     .addData("Current Position", robot.getLiftPosition())
                     .addData("Current Position Cm", robot.getLiftPositionCm())
-                    .addData("Highest Position", robot.liftMaximum())
-                    .addData("Lowest Position", robot.liftMinimum());
+                    .addData("Highest Position", robot.liftMaximum());
             telemetry.addLine("IMU Z||")
                     .addData(" ", robot.imuGetZ());
 
