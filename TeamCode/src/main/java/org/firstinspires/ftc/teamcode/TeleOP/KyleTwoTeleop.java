@@ -97,14 +97,15 @@ public class KyleTwoTeleop extends OpMode {
         //Fix in HardwareAndMethods
         //Set Lift to up
         if(gamepad2.right_bumper && !liftChangedUp) {
-            robot.changeLiftPos(93);
+            robot.setLiftPosition(97);
             liftChangedUp = true;
         } else if(!gamepad2.dpad_down){
             liftChangedUp = false;
         }
         //set lift all the way down
         if(gamepad2.left_bumper && !liftChangedDown) {
-            robot.changeLiftPos(0);
+            robot.setLiftPosition(0);
+
             liftChangedDown = true;
         } else if(!gamepad2.dpad_down){
             liftChangedDown = false;

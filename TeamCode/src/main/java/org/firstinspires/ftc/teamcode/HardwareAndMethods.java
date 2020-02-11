@@ -36,12 +36,14 @@ public class HardwareAndMethods {
     static final float COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * 3.1415f);
 
     public float speedMod = 1f;
-    public float liftPeakH, liftPeakL = 0f;
+    public int liftPeakH, liftPeakL = 0;
 
     public Servo platformRight = null;
     public Servo platformLeft = null;
     public Servo claw = null;
     public Servo capstone = null;
+    int addative = 1;
+    int target;
 
     public float peak;
     BNO055IMU imu;
@@ -94,7 +96,7 @@ public class HardwareAndMethods {
         // Set motor modes
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if(type == "auto"){
             leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -213,23 +215,35 @@ public class HardwareAndMethods {
         mechanum(0f, 0f, 0f);
     }
 
+    public void liftByBlock(int blockTarget){
+        int current = getLiftPositionCm();
 
-    //Kyle's lift position idea
-    public void changeLiftPos(float pos){
-        float mappedLiftPos = map(pos, 0, 97, 0, 10735);
+        int mod = current % 14;
 
-        while(getLiftPosition() > mappedLiftPos + 1 || getLiftPosition() < mappedLiftPos - 1) {
-            if (getLiftPosition() > 0) {
-                lift.setPower(-1);
-            } else if (getLiftPosition() < 00) {
-                lift.setPower(0);
+        if(current > 5){
+            target = current - ((current % 14) + 5) + (( blockTarget > 0) ? 14 : 0) * blockTarget;
             }
+        else if(current < 5) {
+                target = ((blockTarget > 0) ? 5 : 0) + (blockTarget - 1) * 14 ;
+            }
+        else if(current == 5){
+                target = (blockTarget > 0) ? 19 : 0;
+            }
+            setLiftPosition(target + addative);
+    }
+    //Kyle's lift position idea
+    public void setLiftPosition(int pos){
+        int mappedLiftPos = mapInt(pos, 0, 97, 0, liftMaximum());
+        lift.setTargetPosition(mappedLiftPos);
+        lift.setPower(1);
+        while(lift.isBusy()){
+
         }
     }
 
 
     //find out maximum and minimum of the lift
-    public float liftMaximum() {
+    public int liftMaximum() {
         if(lift.getCurrentPosition() > liftPeakH){
             liftPeakH = lift.getCurrentPosition();
         }
@@ -242,6 +256,9 @@ public class HardwareAndMethods {
         return liftPeakL;
     }
 
+    public int mapInt(int input, int inputMin, int inputMax, int outputMin, int outputMax){
+        return (input - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
+    }
 
     public float map(float input, float inputMin, float inputMax, float outputMin, float outputMax){
         return (input - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
@@ -257,11 +274,11 @@ public class HardwareAndMethods {
         return orientation.firstAngle;
     }
 
-    public float getLiftPosition(){
+    public int getLiftPosition(){
         return lift.getCurrentPosition();
     }
-    public float getLiftPositionCm(){
-        return  map(getLiftPosition(), 0, 97, 0, 10735);
+    public int getLiftPositionCm(){
+        return mapInt(lift.getCurrentPosition(), 0, 97, 0, 10735);
     }
 
 
