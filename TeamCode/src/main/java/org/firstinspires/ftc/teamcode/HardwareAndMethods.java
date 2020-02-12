@@ -228,14 +228,18 @@ public class HardwareAndMethods {
 
     //Kyle's lift position idea
     public void setLiftPosition(int cmPos){
-        //lift.setTargetPosition(0);
-       // lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //map the positions to centimeters
         int mappedLiftPos = mapInt(cmPos, 0, 97, 0, liftMaximum());
+
+        //Look at example PushbotAutoDriveByEncoder, used that to determine this goes here (even though the guide says otherwise)
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setTargetPosition(mappedLiftPos);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        //set speed based on PushbotAutoDriveByEncoder
+        //lift.setPower(Math.abs(1));
 
+        //if statement written by Kyle (not from example code) Possibly unnecessary with the code above (...Math.abs...)
         if(getLiftPositionCm() < cmPos){
             lift.setPower(1);
         }
