@@ -78,7 +78,7 @@ public class HardwareAndMethods {
         rightBack = hwMap.get(DcMotor.class, "rightBack");
         lift = hwMap.get(DcMotor.class, "lift");
         lift.setTargetPosition(0);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         platformRight = hwMap.get(Servo.class, "platformRight");
         platformLeft = hwMap.get(Servo.class, "platformLeft");
@@ -232,6 +232,10 @@ public class HardwareAndMethods {
        // lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         int mappedLiftPos = mapInt(cmPos, 0, 97, 0, liftMaximum());
         lift.setTargetPosition(mappedLiftPos);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
         if(getLiftPositionCm() < cmPos){
             lift.setPower(1);
         }
@@ -244,6 +248,15 @@ public class HardwareAndMethods {
         while(lift.isBusy()){
 
         }
+    }
+    public void testLiftSet() {
+        lift.setTargetPosition(1440);
+
+        // Turn On RUN_TO_POSITION
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // reset the timeout time and start motion.
+        //no idea what Math.abs does, but it was in an example so i think it'd be good to try
+        lift.setPower(Math.abs(1));
     }
 
 

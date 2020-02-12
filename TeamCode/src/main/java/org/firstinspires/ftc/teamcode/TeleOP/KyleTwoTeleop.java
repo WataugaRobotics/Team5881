@@ -121,6 +121,12 @@ public class KyleTwoTeleop extends OpMode {
             liftChanged = true;
         } else if (!gamepad2.left_bumper) liftChanged = false;
 
+        if (gamepad2.right_bumper && !liftChanged) {
+            //code
+            robot.testLiftSet();
+            liftChanged = true;
+        } else if (!gamepad2.right_bumper) liftChanged = false;
+
 
 
 
